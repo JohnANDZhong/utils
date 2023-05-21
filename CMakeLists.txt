@@ -2,6 +2,7 @@
 add_library(utils
     src/factory/factory.c
     src/time/sys_time.c
+    src/logger/sys_logger.c
 )
 
 # 设置模块1的头文件路径

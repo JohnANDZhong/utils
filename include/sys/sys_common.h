@@ -10,9 +10,8 @@
  */
 #ifndef __SYS_COMMON_H__
 #define __SYS_COMMON_H__
-#include <stdio.h>
-#include <unistd.h>
 
+#include <stdio.h>
 typedef int INT32;
 
 typedef unsigned int UINT32;
@@ -28,5 +27,7 @@ typedef unsigned char UINT8;
 typedef long LONG;
 
 typedef unsigned long ULONG;
+
+typedef void VOID;
 
 #endif
