@@ -1,22 +1,49 @@
 #ifndef QUEUE_H__
 #define QUEUE_H__
-#define   KEYPATH   "/etc/services/"
-#define   KEYPROJ   'w'
 
-typedef struct snd_st   //发送内容
-{
-    void *snd_ct(void );
+#include "sys_common.h"
 
-}snd_cntext;
+typedef LONG MSG_Q;
 
-struct msg_st       //消息队列
-{
-    long mtype;
-    snd_cntext *snd;
-};
-extern struct msg_st *msgp; 
-key_t getid(void);
-int msg_create(key_t,struct msg_st* );
-int msg_destory(int);
-void *snd_ct(void);
+/**
+ * @brief 消息队列的初始化
+ * 
+ * @param id 消息队列的ID
+ * @param maxNum 队列最大长度 
+ * @param byteSize 队列的包长
+ * @return INT32 创建成功还是失败  
+ */
+INT32 sys_queue_create(MSG_Q *id, char *name, UINT32 maxNum, UINT32 byteSize);
+
+//消息队列的发送
+/**
+ * @brief 消息队列的发送
+ * 
+ * @param id 
+ * @param data 发送数据指针
+ * @param byteSize 数据大小
+ * @param iWaitTime 延时多久发送 ms
+ * @return INT32 发送成功还是失败
+ */
+INT32 sys_queue_send(MSG_Q *id, void *data, UINT32 byteSize, UINT32 iWaitTime);
+
+/**
+ * @brief 消息队列的发送
+ * 
+ * @param id 
+ * @param data 接受数据的指针
+ * @param byteSize 接受数据的大小
+ * @return INT32 发送成功还是失败
+ */
+INT32 sys_queue_recv(MSG_Q *id, void *data, UINT32 *byteSize);
+
+//消息队列的销毁
+/**
+ * @brief 
+ * 
+ * @param id 
+ * @return INT32 
+ */
+INT32 sys_queue_del(MSG_Q *id);
+
 #endif
