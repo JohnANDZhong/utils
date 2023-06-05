@@ -20,26 +20,26 @@
 
 INT32 sys_queue_create(MSG_Q *id, char *name, UINT32 maxNum, UINT32 byteSize)
 {
-    mqd_t md;
+   // mqd_t md;
     struct mq_attr msg;
   
-    if(id == NULL || name == NULL)
+  /* if(id == NULL || name == NULL)
     {
         LOG_MESSAGE(LOG_ERROR, "name or id is null");
         return ERROR;
-    }
-
+    }*/
+       LOG_MESSAGE(LOG_INFO, "mq_open BEGIN");
     msg.mq_maxmsg = maxNum;
     msg.mq_msgsize = byteSize;
 
-    md = mq_open(name, O_RDWR|O_CREAT, 0600, msg);   //open the queue to both send and receive message &没有就创建
-    if(0 > md)
+    *id = mq_open(name, O_RDWR|O_CREAT, 0666, &msg);   //open the queue to both send and receive message &没有就创建
+    if(0 > *id)
     {
         LOG_MESSAGE(LOG_ERROR, "mq_open fail");
         return ERROR;
     }
     
-    *id = md;
+   // *id = md;
 
     return OK;
 }
