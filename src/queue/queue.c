@@ -28,10 +28,10 @@ INT32 sys_queue_create(MSG_Q *id, char *name, UINT32 maxNum, UINT32 byteSize)
         LOG_MESSAGE(LOG_ERROR, "name or id is null");
         return ERROR;
     }*/
-       LOG_MESSAGE(LOG_INFO, "mq_open BEGIN");
+    msg.mq_flags = 0;
     msg.mq_maxmsg = maxNum;
     msg.mq_msgsize = byteSize;
-
+    msg.mq_curmsgs = 0;
     *id = mq_open(name, O_RDWR|O_CREAT, 0666, &msg);   //open the queue to both send and receive message &没有就创建
     if(0 > *id)
     {
@@ -58,7 +58,7 @@ INT32 sys_queue_create(MSG_Q *id, char *name, UINT32 maxNum, UINT32 byteSize)
 INT32 sys_queue_send(MSG_Q *id, void *data, UINT32 byteSize, UINT32 iWaitTime)
 {
     INT32 ret = ERROR;
-
+    INT32 pri = 1;
     if(id == NULL)
     {
         LOG_MESSAGE(LOG_ERROR, "id null");
@@ -67,7 +67,7 @@ INT32 sys_queue_send(MSG_Q *id, void *data, UINT32 byteSize, UINT32 iWaitTime)
 
     usleep(1000*iWaitTime);
 
-    ret = mq_send(*id, (char *)data, byteSize, 0);
+    ret = mq_send(*id, (char *)data, byteSize, pri);
     if(0 > ret)
     {
         LOG_MESSAGE(LOG_ERROR, "mq_semd()fail");
@@ -88,8 +88,8 @@ INT32 sys_queue_send(MSG_Q *id, void *data, UINT32 byteSize, UINT32 iWaitTime)
 INT32 sys_queue_recv(MSG_Q *id, void *data, UINT32 byteSize)
 {
     ssize_t len;
-
-    len = mq_receive(*id, (char *)data, (size_t)byteSize, 0);
+    INT32 pri;
+    len = mq_receive(*id, (char *)data, (size_t)byteSize, &pri);
     if(0 > len)
     {
         LOG_MESSAGE(LOG_ERROR, "mq_receive()fail");
