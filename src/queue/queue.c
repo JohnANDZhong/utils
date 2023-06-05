@@ -20,7 +20,6 @@
 
 INT32 sys_queue_create(MSG_Q *id, char *name, UINT32 maxNum, UINT32 byteSize)
 {
-   // mqd_t md;
     struct mq_attr msg;
   
   /* if(id == NULL || name == NULL)
@@ -35,12 +34,9 @@ INT32 sys_queue_create(MSG_Q *id, char *name, UINT32 maxNum, UINT32 byteSize)
     *id = mq_open(name, O_RDWR|O_CREAT, 0666, &msg);   //open the queue to both send and receive message &没有就创建
     if(0 > *id)
     {
-        perror("mq_open()");
         LOG_MESSAGE(LOG_ERROR, "mq_open fail");
         return ERROR;
     }
-    
-   // *id = md;
 
     return OK;
 }
@@ -59,6 +55,7 @@ INT32 sys_queue_send(MSG_Q *id, void *data, UINT32 byteSize, UINT32 iWaitTime)
 {
     INT32 ret = ERROR;
     INT32 pri = 1;
+    
     if(id == NULL)
     {
         LOG_MESSAGE(LOG_ERROR, "id null");
@@ -89,6 +86,7 @@ INT32 sys_queue_recv(MSG_Q *id, void *data, UINT32 byteSize)
 {
     ssize_t len;
     INT32 pri;
+    
     len = mq_receive(*id, (char *)data, (size_t)byteSize, &pri);
     if(0 > len)
     {
@@ -108,7 +106,6 @@ INT32 sys_queue_recv(MSG_Q *id, void *data, UINT32 byteSize)
  */
 INT32 sys_queue_del(MSG_Q *id, char *name)
 {
-
     mq_close(*id);
     mq_unlink(name);
     return OK;
