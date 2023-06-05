@@ -35,6 +35,7 @@ INT32 sys_queue_create(MSG_Q *id, char *name, UINT32 maxNum, UINT32 byteSize)
     *id = mq_open(name, O_RDWR|O_CREAT, 0666, &msg);   //open the queue to both send and receive message &没有就创建
     if(0 > *id)
     {
+        perror("mq_open()");
         LOG_MESSAGE(LOG_ERROR, "mq_open fail");
         return ERROR;
     }
