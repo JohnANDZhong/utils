@@ -3,7 +3,7 @@
 #include "list.h"
 
 // 在链表的末尾插入新节点
-void list_insert(struct Node** head, void* data) {
+INT32 list_insert(struct Node** head, void* data) {
     // 创建新节点
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = data;
@@ -12,7 +12,7 @@ void list_insert(struct Node** head, void* data) {
     // 如果链表为空，将新节点设置为头节点
     if (*head == NULL) {
         *head = newNode;
-        return;
+        return ERROR;
     }
 
     // 找到链表的末尾节点
@@ -23,6 +23,7 @@ void list_insert(struct Node** head, void* data) {
 
     // 将新节点链接到末尾节点
     current->next = newNode;
+    return OK;
 }
 
 // 创建链表，并设置回调函数
